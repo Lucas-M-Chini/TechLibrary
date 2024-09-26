@@ -6,8 +6,18 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('TechLibrary'),
-         backgroundColor: Color(0xFF00E0FF)
+        backgroundColor: Color(0xFF00E0FF),
+        title: Row(
+          children: [
+            Image.asset(
+              'assets/techlibrarylogo.png', // Substitua pelo caminho da sua imagem
+              // Ajuste a altura conforme necessário
+              width: 40,
+            ),
+            SizedBox(width: 16),
+            Text('TechLibrary', style: TextStyle(fontSize: 20)),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -52,17 +62,25 @@ class HomeScreen extends StatelessWidget {
         child: ListView(
           children: [
             _customTitle('Lidos recentemente', Icons.history),
-            Row(
-              children: [
-                _bookPoster('O pequeno Príncipe', 'recentes1.jpg'),
-                SizedBox(width: 40, height: 24),
-                _bookPoster('Diário de um zumbi do minecraft', 'recentes2.jpg'),
-              ],
+            SizedBox(
+              height: 250,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  _bookPoster('O pequeno Príncipe', 'recentes1.jpg'),
+                  SizedBox(width: 40, height: 24),
+                  _bookPoster(
+                      'Diário de um zumbi do minecraft', 'recentes2.jpg'),
+                ],
+              ),
             ),
             SizedBox(height: 72),
             _customTitle('Favoritos', Icons.favorite_border),
-            
-            Row(
+
+           SizedBox(
+              height: 250,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
               children: [
                 _bookPoster('O Homem De Giz', 'favorito1.jpg'),
                 SizedBox(width: 40),
@@ -71,6 +89,7 @@ class HomeScreen extends StatelessWidget {
                 _bookPoster('Dom Quixote', 'favorito3.webp'),
               ],
             ),
+           ),
             // Adicione mais livros conforme necessário
           ],
         ),
@@ -81,7 +100,7 @@ class HomeScreen extends StatelessWidget {
   ListTile _buildListTile(String title, String subtitle, String iconPath) {
     return ListTile(
       leading: Image.asset(
-        iconPath,
+        'assets/${iconPath}',
         width: 24, // Ajuste o tamanho conforme necessário
         height: 24,
       ),
@@ -107,7 +126,7 @@ class HomeScreen extends StatelessWidget {
     return Column(
       children: [
         Image.asset(
-          imgUrl,
+          'assets/${imgUrl}',
           height: 175,
         ),
         SizedBox(height: 4),
