@@ -18,6 +18,8 @@ class _CadastroScreenState extends State<CadastroScreen> {
   final TextEditingController _paginasController =
       TextEditingController(); // Controlador para Nº de Páginas
 
+      
+  final _key = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,10 +44,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
           final String autor = _autorController.text;
           final String paginas = _paginasController.text;
 
-          if (editora.isNotEmpty &&
-              livro.isNotEmpty &&
-              autor.isNotEmpty &&
-              paginas.isNotEmpty) {
+          if () {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('Livro cadastrado com sucesso!')),
             );
@@ -60,54 +59,83 @@ class _CadastroScreenState extends State<CadastroScreen> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              Image.asset('assets/techlibrarylogo.png'),
-              Text('Cadastre seu livro:'),
-              TextField(
-                controller: _idController,
-                decoration: InputDecoration(
-                  labelText: 'ID',
-                  border: OutlineInputBorder(),
+          child: Form(
+            key: _key,
+            child: Column(
+                children:[
+                  Image.asset('assets/techlibrarylogo.png'),
+                Text('Cadastre seu livro:'),
+                TextFormField(
+                  validator: (value) {
+                      if (value != null && value.isEmpty) {
+                      return "O nome da editora não pode ficar em branco";
+                    }
+                    return null;
+                  },
                 ),
-              ),
-              SizedBox(height: 20.0),
-              TextField(
-                controller: _editoraController,
-                decoration: InputDecoration(
-                  labelText: 'Editora', // Corrigido o fechamento de aspas
-                  border: OutlineInputBorder(),
+
+                TextFormField(
+                   validator: (value) {
+                      if (value != null && value.isEmpty) {
+                      return "O nome do livro não pode ficar em branco";
+                    }
+                    return null;
+                  },
+),
+  TextFormField(
+                   validator: (value) {
+                      if (value != null && value.isEmpty) {
+                      return "O nome do(a) autor(a) não pode ficar em branco";
+                    }
+                    return null;
+                  },
+),
+
+TextFormField(
+                   validator: (value) {
+                      if (value != null && value.isEmpty) {
+                      return "O N° de páginas não pode ficar em branco";
+                    }
+                    return null;
+                  },
+),
+
+                  controller: _editoraController,
+                  decoration: InputDecoration(
+                    labelText: 'Editora', // Corrigido o fechamento de aspas
+                    border: OutlineInputBorder(),
+                  ),
                 ),
-              ),
-              SizedBox(height: 20.0),
-              TextField(
-                controller: _livroController,
-                decoration: InputDecoration(
-                  labelText: 'Livro',
-                  border: OutlineInputBorder(),
+                SizedBox(height: 20.0),
+                TextField(
+                  controller: _livroController,
+                  decoration: InputDecoration(
+                    labelText: 'Livro',
+                    border: OutlineInputBorder(),
+                  ),
                 ),
-              ),
-              SizedBox(height: 20.0),
-              TextField(
-                controller: _autorController,
-                decoration: InputDecoration(
-                  labelText: 'Autor(a)',
-                  border: OutlineInputBorder(),
+                SizedBox(height: 20.0),
+                TextField(
+                  controller: _autorController,
+                  decoration: InputDecoration(
+                    labelText: 'Autor(a)',
+                    border: OutlineInputBorder(),
+                  ),
                 ),
-              ),
-              SizedBox(height: 20.0),
-              TextField(
-                controller: _paginasController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  labelText: 'Nº de Páginas',
-                  border: OutlineInputBorder(),
+                SizedBox(height: 20.0),
+                TextField(
+                  controller: _paginasController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: 'Nº de Páginas',
+                    border: OutlineInputBorder(),
+                 ),
                 ),
-              ),
-            ],
+            ),
           ),
         ),
       ),
-    );
   }
 }
+]
+                

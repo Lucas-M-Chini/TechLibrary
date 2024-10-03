@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:techlibrary/CadastroScreen.dart';
+import 'package:techlibrary/EditScreen.dart';
 import 'package:techlibrary/HomeScreen.dart';
 
 void main() {
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/':(context)=>HomeScreen(),
         '/cadastro':(context)=>CadastroScreen(),
-
+        '/edit': (context )=>EditScreen(),
       },
     );
   }

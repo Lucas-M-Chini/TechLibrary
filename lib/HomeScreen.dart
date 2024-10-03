@@ -1,36 +1,60 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:techlibrary/CadastroScreen.dart';
+import 'package:techlibrary/repository/book_repository.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color(0xFF00E0FF),
-        title: Row(
-          children: [
-            Image.asset(
-              'assets/techlibrarylogo.png', // Substitua pelo caminho da sua imagem
-              // Ajuste a altura conforme necessário
-              width: 40,
+    late Widget widget;
+
+    return FutureBuilder(
+      future: BookRepository.findAll(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        log("Dados: ${snapshot.data}");
+        if (snapshot.data != null && snapshot.data!.isNotEmpty) {
+          widget = Column(
+            children: [
+              _buildSearchField(),
+              _buildBookList(context),
+            ],
+          );
+        } else {
+          widget = Center(
+            child: Text('Não existem dados'),
+          );
+        }
+
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Color(0xFF00E0FF),
+            title: Row(
+              children: [
+                Image.asset(
+                  'assets/techlibrarylogo.png', // Substitua pelo caminho da sua imagem
+                  // Ajuste a altura conforme necessário
+                  width: 40,
+                ),
+                SizedBox(width: 16),
+                Text('TechLibrary', style: TextStyle(fontSize: 20)),
+              ],
             ),
-            SizedBox(width: 16),
-            Text('TechLibrary', style: TextStyle(fontSize: 20)),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, '/cadastro');
-        },
-        child: Icon(Icons.add),
-      ),
-      body: Column(
-        children: [
-          _buildSearchField(),
-          _buildBookList(),
-        ],
-      ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/cadastro');
+            },
+            child: Icon(Icons.add),
+          ),
+          body: widget,
+        );
+      },
     );
   }
 
@@ -55,7 +79,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBookList() {
+  Widget _buildBookList(BuildContext context) {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -67,29 +91,29 @@ class HomeScreen extends StatelessWidget {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
-                  _bookPoster('O pequeno Príncipe', 'recentes1.jpg'),
+                  _bookPoster('O pequeno Príncipe', 'recentes1.jpg', context),
                   SizedBox(width: 40, height: 24),
-                  _bookPoster(
-                      'Diário de um zumbi do minecraft', 'recentes2.jpg'),
+                  _bookPoster('Diário de um zumbi do minecraft',
+                      'recentes2.jpg', context),
                 ],
               ),
             ),
             SizedBox(height: 72),
             _customTitle('Favoritos', Icons.favorite_border),
 
-           SizedBox(
+            SizedBox(
               height: 250,
               child: ListView(
                 scrollDirection: Axis.horizontal,
-              children: [
-                _bookPoster('O Homem De Giz', 'favorito1.jpg'),
-                SizedBox(width: 40),
-                _bookPoster('O Hobbit', 'favorito2.jpg'),
-                SizedBox(width: 40),
-                _bookPoster('Dom Quixote', 'favorito3.webp'),
-              ],
+                children: [
+                  _bookPoster('O Homem De Giz', 'favorito1.jpg', context),
+                  SizedBox(width: 40),
+                  _bookPoster('O Hobbit', 'favorito2.jpg', context),
+                  SizedBox(width: 40),
+                  _bookPoster('Dom Quixote', 'favorito3.webp', context),
+                ],
+              ),
             ),
-           ),
             // Adicione mais livros conforme necessário
           ],
         ),
@@ -122,16 +146,21 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Column _bookPoster(String name, String imgUrl) {
-    return Column(
-      children: [
-        Image.asset(
-          'assets/${imgUrl}',
-          height: 175,
-        ),
-        SizedBox(height: 4),
-        Text(name),
-      ],
+  Widget _bookPoster(String name, String imgUrl, BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, '/edit');
+      },
+      child: Column(
+        children: [
+          Image.asset(
+            'assets/${imgUrl}',
+            height: 175,
+          ),
+          const SizedBox(height: 4),
+          Text(name),
+        ],
+      ),
     );
   }
 }
